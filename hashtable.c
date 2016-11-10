@@ -63,7 +63,7 @@ HashItem *lookup(HashTable *ht, char *key) {
     HashList *list = (ht->table)[hash(key)];
     HashItem *ptr;
     for (ptr = list->head; ptr != NULL; ptr = ptr->next) {
-        if ((ht->compare)(key, ptr->key) == 0)
+        if (strcmp(key, ptr->key) == 0)
             return ptr;
     }
     return NULL;
