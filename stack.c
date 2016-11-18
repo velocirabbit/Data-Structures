@@ -80,7 +80,7 @@ void *peekStack(Stack *stack) {
 }
 
 StackItem *freeStackItem(Stack *stack, StackItem *stackItem) {
-    (stack->destroy)(stackItem->data);
+    destroyStackItem(stack, stackItem);
     StackItem *previous = stackItem->previous;
     free(stackItem);
     return previous;

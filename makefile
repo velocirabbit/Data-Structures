@@ -1,6 +1,6 @@
 FLAGS = -std=c99
 MAINFILE = datastructurestest.c
-TESTFILES = linkedlist.o stack.o queue.o hashtable.o
+TESTFILES = linkedlist.o stack.o queue.o hashtable.o generictree.o
 
 datastructurestest: $(TESTFILES) $(MAINFILE)
 	gcc $(FLAGS) $(MAINFILE) $(TESTFILES) -o datastructurestest
@@ -16,6 +16,9 @@ queue.o: queue.c queue.h
 
 hashtable.o: hashtable.c hashtable.h
 	gcc $(FLAGS) -c hashtable.c
+
+generictree.o: generictree.c generictree.h
+	gcc $(FLAGS) -c generictree.c
 
 test:
 	./datastructurestest

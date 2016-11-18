@@ -9,6 +9,7 @@
 #define stackEmpty(stack)           ((stack)->head == NULL)
 #define stackSize(stack)            ((stack)->size)
 #define isStackTop(stack, item)     ((item) == (stack)->head)
+#define destroyStackItem(stack, item)   (((stack)->destroy)((item)->data))
 
 typedef struct stackitem_ {
     void *data;

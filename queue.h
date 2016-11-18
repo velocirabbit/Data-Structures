@@ -9,6 +9,7 @@
  #define queueSize(queue)           ((queue)->size)
  #define queueHead(queue)           ((queue)->head)
  #define isQueueHead(queue, item)   ((item) == (queue)->head)
+ #define destroyQueueItem(queue, item)  (((queue)->destroy)((item)->data))
 
 typedef struct queueitem_ {
     void *data;

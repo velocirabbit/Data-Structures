@@ -98,7 +98,7 @@ void freeList(List *list) {
  * Returns a pointer to listElem->next (which could be NULL).
  */
 ListElement *freeListElement(List *list, ListElement *listElem) {
-    (list->destroy)(listElem->data);
+    destroyListElement(list, listElem);
     ListElement *next = listElem->next;
     free(listElem);
     return next;

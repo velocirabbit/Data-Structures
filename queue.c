@@ -40,7 +40,7 @@ QueueItem *initQueueItem(void *data) {
 }
 
 QueueItem *freeQueueItem(Queue *queue, QueueItem *queueItem) {
-    (queue->destroy)(queueItem->data);
+    destroyQueueItem(queue, queueItem);
     QueueItem *next = queueItem->next;
     free(queueItem);
     return next;

@@ -9,6 +9,7 @@
 #include "stack.h"
 #include "queue.h"
 #include "hashtable.h"
+#include "generictree.h"
 
 #define STRLEN 120
 
@@ -19,6 +20,7 @@ bool testList(void);
 bool testStack(void);
 bool testQueue(void);
 bool testHash(void);
+bool testTree(void);
 
 // Helper functions
 int destroy(void *d);
@@ -52,6 +54,12 @@ int main(void) {
         printf("testHash successful\n\n");
     else
         printf("testHash failed\n\n");
+
+    // Binary tree
+    if (testTree())
+        printf("testTree successful\n\n");
+    else
+        printf("testTree failed\n\n");
 
     printf("\n\n");
     return 0;
@@ -294,6 +302,7 @@ bool testQueue(void) {
     printf("\t- freeQueue() successful\n");
 
     printf("=====================\n");
+    return True;
 }
 
 bool testHash(void) {
@@ -333,6 +342,55 @@ bool testHash(void) {
     printf("\t- freeQueue() successful\n");
 
     printf("=====================\n");
+    return True;
+}
+
+bool testTree(void) {
+    printf("\nRunning testTree()\n----------\n");
+
+    // initTree()
+    Tree *bintree = initTree(destroy, toString, compare);
+    Tree *gentree = initTree(destroy, toString, compare);
+
+    // add[Bin]Data()
+    if (addBinData(bintree, newObject("Apple"), newObject("Apple")) == NULL) {
+        printf("\taddBinData() failed\n");
+        return False;
+    }
+    else if (treeSize(bintree) != 1) {
+        printf("\ttreeSize(bintree) failed\n");
+        return False;
+    }
+    else
+        printf("\t- addBinData() successful\n");
+
+    if (addData(gentree, treeRoot(gentree), 0, newObject("test"),
+                newObject("test"), 1) != NULL) {
+        printf("\taddData() to empty gentree failed\n");
+        return False;
+    }
+    else
+        printf("\t- addData() to empty gentree successful\n");
+
+    treeRoot(gentree) = initTreeNode(newObject("CEO"), newObject("CEO"), 4);
+    if (addData(gentree, treeRoot(gentree), 0, newObject("Director"),
+                newObject("Director"), 3) == NULL) {
+        printf("\taddData() failed\n");
+        return False;
+    }
+    else if (treeSize(gentree) != 1) {
+        printf("\ttreeSize(gentree) failed\n");
+        return False;
+    }
+    else
+        printf("\t- addData() to nonempty gentree successful\n");
+
+    // freeTree()
+    freeTree(bintree);
+    freeTree(gentree);
+
+    printf("=====================\n");
+    return True;
 }
 
 /* Helper functions */

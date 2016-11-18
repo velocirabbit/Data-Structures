@@ -13,6 +13,7 @@
 #define isListTail(list, elem)  ((elem) == (list)->tail)
 #define listData(elem)          ((elem)->data)
 #define listNext(elem)          ((elem)->next)
+#define destroyListElement(list, elem)  (((list)->destroy)((elem)->data))
 
 typedef struct listelement_ {
     void *data;
