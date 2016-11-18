@@ -13,6 +13,8 @@
 #define nodeChildren(node)  ((node)->children)
 #define nodeChild(node, i)  (((node)->children)[i])
 #define treecmp(tree, n1, n2)   (((tree)->compare)((n1)->data, (n2)->data))
+#define nodeStr(tree, n)        (((tree)->toString)((n)->data))
+#define nodeKey(n)      ((n)->key)
 
 typedef struct treenode_ {
     int nChildren;
@@ -38,8 +40,9 @@ TreeNode *addData(Tree *tree, TreeNode *n, int at, void *data,
 TreeNode *freeTreeNode(Tree *tree, TreeNode *node);
 void freeTree(Tree *tree);
 void freeAllNodes(Tree *tree, TreeNode *n);
+void printTree(Tree *tree, TreeNode *node, int isBinary, int lvl);
 
-//TODO: print, search, insert, remove
+//TODO: search, remove
 
 
 #endif

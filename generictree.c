@@ -62,32 +62,32 @@ TreeNode *addBinData(Tree *tree, void *data, char *key) {
                 break;
             }
             else {
+                newNode = initTreeNode(data, key, 2);
                 int cmp = treecmp(tree, ptr, newNode);
                 if (cmp < 0) {
                     // newNode less than ptr
                     if (nodeChild(ptr, 0) == NULL) {
-                        newNode = initTreeNode(data, key, 2);
                         nodeChild(ptr, 0) = newNode;
+                        treeSize(tree)++;
                         break;
                     }
                     else
                         ptr = nodeChild(ptr, 0);
-                    treeSize(tree)++;
                 }
                 else if (cmp > 0) {
                     // newNode greater than ptr
                     if (nodeChild(ptr, 1) == NULL) {
-                        newNode = initTreeNode(data, key, 2);
                         nodeChild(ptr, 1) = newNode;
+                        treeSize(tree)++;
                         break;
                     }
                     else
                         ptr = nodeChild(ptr, 1);
-                    treeSize(tree)++;
                 }
                 else {
                     // newNode already exists
                     fprintf(stderr, "ERROR: %s already exists; can't add to tree", key);
+                    freeTreeNode(tree, newNode);
                     newNode = NULL;
                     break;
                 }
@@ -101,8 +101,14 @@ TreeNode *addData(Tree *tree, TreeNode *n, int at, void *data,
                   char *key, int nChildren) {
     TreeNode *newNode;
     if (n == NULL) {
-        fprintf(stderr, "ERROR: Can't addData to NULL node. initTreeNode isntead\n");
-        newNode = NULL;
+        if (at != 0) {
+            fprintf(stderr, "ERROR: addData to null tree should be at 0\n");
+            newNode = NULL;
+        }
+        else {
+            treeRoot(tree) = initTreeNode(data, key, nChildren);
+            treeSize(tree)++;
+        }
     }
     else if (numChildren(n) < at) {
         fprintf(stderr, "ERROR: Can't add more children to TreeNode than indicated\n");
@@ -137,4 +143,44 @@ void freeAllNodes(Tree *tree, TreeNode *n) {
         freeTreeNode(tree, n);
     }
     // If n == NULL, node is empty so don't do anything
+}
+
+// Prints the tree in order if tree is binary, pre-order if not
+void printTree(Tree *tree, TreeNode *node, int isBinary, int lvl) {
+    if (isBinary) {
+        if (node == NULL) {
+            if (lvl > 0) {
+                printf("|--");
+                for (int i = 1; i < lvl; i++)
+                    printf("----");
+                printf(" %d) ", lvl);
+            }
+            printf("%s:\t%s\n", "{NULLKEY}", (tree->toString)(node));
+            return;
+        }
+        printTree(tree, nodeChild(node, 0), 1, lvl + 1);
+        if (lvl > 0) {
+            printf("|--");
+            for (int i = 1; i < lvl; i++)
+                printf("----");
+            printf(" %d) ", lvl);
+        }
+        printf("%s:\t%s\n", nodeKey(node), nodeStr(tree, node));
+        printTree(tree, nodeChild(node, 1), 1, lvl + 1);
+    }
+    else {
+        if (lvl > 0) {
+            printf("|-");
+            for (int i = 1; i < lvl; i++)
+                printf("--");
+            printf(" %d) ", lvl);
+        }
+        printf("%s:\t%s\n", (node == NULL) ? "{NULLKEY}" : nodeKey(node),
+               (tree->toString)((node == NULL) ? NULL : node->data));
+        if (node == NULL)
+            return;
+        for (int i = 0; i < numChildren(node); i++)
+            printTree(tree, nodeChild(node, i), 0, lvl + 1);
+    }
+
 }

@@ -353,7 +353,7 @@ bool testTree(void) {
     Tree *gentree = initTree(destroy, toString, compare);
 
     // add[Bin]Data()
-    if (addBinData(bintree, newObject("Apple"), newObject("Apple")) == NULL) {
+    if (addBinData(bintree, newObject("Earth"), newObject("Earth")) == NULL) {
         printf("\taddBinData() failed\n");
         return False;
     }
@@ -364,17 +364,16 @@ bool testTree(void) {
     else
         printf("\t- addBinData() successful\n");
 
-    if (addData(gentree, treeRoot(gentree), 0, newObject("test"),
+    if (addData(gentree, treeRoot(gentree), 1, newObject("test"),
                 newObject("test"), 1) != NULL) {
-        printf("\taddData() to empty gentree failed\n");
+        printf("\tfailed addData() to empty gentree failed\n");
         return False;
     }
     else
-        printf("\t- addData() to empty gentree successful\n");
+        printf("\t- failed addData() to empty gentree successful\n");
 
-    treeRoot(gentree) = initTreeNode(newObject("CEO"), newObject("CEO"), 4);
-    if (addData(gentree, treeRoot(gentree), 0, newObject("Director"),
-                newObject("Director"), 3) == NULL) {
+    if (addData(gentree, treeRoot(gentree), 0, newObject("CEO"),
+                newObject("CEO"), 4) == NULL) {
         printf("\taddData() failed\n");
         return False;
     }
@@ -383,7 +382,73 @@ bool testTree(void) {
         return False;
     }
     else
+        printf("\t- addData() to empty gentree successful\n");
+        
+    if (addData(gentree, treeRoot(gentree), 0, newObject("Director"),
+                newObject("Director"), 3) == NULL) {
+        printf("\taddData() failed\n");
+        return False;
+    }
+    else if (treeSize(gentree) != 2) {
+        printf("\ttreeSize(gentree) failed\n");
+        return False;
+    }
+    else
         printf("\t- addData() to nonempty gentree successful\n");
+
+    // printTree()
+    printf("\t- Print 1:\n");
+    printf("\n*** bintree: ***\n");
+    printTree(bintree, treeRoot(bintree), 1, 0);
+    printf("\n\n*** gentree: **\n");
+    printTree(gentree, treeRoot(gentree), 0, 0);
+
+    // add more to both
+    addBinData(bintree, newObject("Cat"), newObject("Cat"));
+    addBinData(bintree, newObject("Dog"), newObject("Dog"));
+    addBinData(bintree, newObject("xylophone"), newObject("Xylophone"));
+    addBinData(bintree, newObject("Mouse"), newObject("Mouse"));
+    addBinData(bintree, newObject("Zebra"), newObject("Zebra"));
+    addBinData(bintree, newObject("Tarantula"), newObject("Tarantula"));
+
+    int gensize = 2;
+    for (int i = 0; i < numChildren(treeRoot(gentree)); i++) {
+        if (i != 0) {
+            addData(gentree, treeRoot(gentree), i, newObject("Director+"),
+                    newObject("Director+"), (i % 2) + 2);
+            gensize++;
+        }
+        for (int j = 0; j < numChildren(nodeChild(treeRoot(gentree), i)); j++) {
+            addData(gentree, nodeChild(treeRoot(gentree), i), j,
+                    newObject("Chief"), newObject("Chief"), (i % 2) + (j % 3) + 2);
+            gensize++;
+        }
+    }
+
+    // printTree()
+    printf("\n\n\n\t- Print 2:\n");
+    printf("\n*** bintree: ***\n");
+    printTree(bintree, treeRoot(bintree), 1, 0);
+    printf("\ntreeSize(bintree): %d\n", treeSize(bintree));
+    printf("\n\n*** gentree: ***\n");
+    printTree(gentree, treeRoot(gentree), 0, 0);
+    printf("\ntreeSize(gentree): %d\n\n", treeSize(gentree));
+
+    // Test additions
+    if (treeSize(bintree) != 7) {
+        printf("\ttreeSize(bintree) failed at 7 members\n");
+        return False;
+    }
+    else
+        printf("\t- Adding more nodes to bintree successful\n");
+
+    if (treeSize(gentree) != gensize) {
+        printf("\ttreeSize(gentree) failed at %d members\n", gensize);
+        return False;
+    }
+    else
+        printf("\t- Adding more nodes to gentree successful\n");
+
 
     // freeTree()
     freeTree(bintree);
