@@ -17,8 +17,8 @@ queue.o: queue.c queue.h
 hashtable.o: hashtable.c hashtable.h
 	gcc $(FLAGS) -c hashtable.c
 
-generictree.o: generictree.c generictree.h
-	gcc $(FLAGS) -c generictree.c
+generictree.o: generictree.c generictree.h stack.o
+	gcc $(FLAGS) -c generictree.c stack.o
 
 test:
 	./datastructurestest

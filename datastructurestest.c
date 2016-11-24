@@ -406,12 +406,14 @@ bool testTree(void) {
     // add more to both
     addBinData(bintree, newObject("Cat"), newObject("Cat"));
     addBinData(bintree, newObject("Dog"), newObject("Dog"));
-    addBinData(bintree, newObject("xylophone"), newObject("Xylophone"));
+    addBinData(bintree, newObject("xylophone"), newObject("xylophone"));
     addBinData(bintree, newObject("Mouse"), newObject("Mouse"));
     addBinData(bintree, newObject("Zebra"), newObject("Zebra"));
     addBinData(bintree, newObject("Tarantula"), newObject("Tarantula"));
 
     int gensize = 2;
+    char *tmp = malloc(sizeof(char[80]));
+    int chiefC = 1;
     for (int i = 0; i < numChildren(treeRoot(gentree)); i++) {
         if (i != 0) {
             addData(gentree, treeRoot(gentree), i, newObject("Director+"),
@@ -419,9 +421,23 @@ bool testTree(void) {
             gensize++;
         }
         for (int j = 0; j < numChildren(nodeChild(treeRoot(gentree), i)); j++) {
+            sprintf(tmp, "Chief %d", chiefC++);
+            int numEmp = (i % 2) + (j % 3) + 2;
             addData(gentree, nodeChild(treeRoot(gentree), i), j,
-                    newObject("Chief"), newObject("Chief"), (i % 2) + (j % 3) + 2);
+                                    newObject(tmp), newObject(tmp), numEmp);
             gensize++;
+            if (i == 1 && j == 2) {
+                TreeNode *tmp = nodeChild(treeRoot(gentree), i);
+                tmp = nodeChild(tmp, j);
+                addData(gentree, tmp, 1, newObject("FINDME1"), newObject("FINDME1"), 0);
+                gensize++;
+            }
+            if (i == 0 && j == 1) {
+                TreeNode *tmp = nodeChild(treeRoot(gentree), i);
+                tmp = nodeChild(tmp, j);
+                addData(gentree, tmp, 1, newObject("FINDME2"), newObject("FINDME2"), 0);
+                gensize++;
+            }
         }
     }
 
@@ -449,6 +465,122 @@ bool testTree(void) {
     else
         printf("\t- Adding more nodes to gentree successful\n");
 
+    // findNode() - bin
+    TreeNode *findBin = findNode(bintree, 1, "xylophone", NULL);
+    if (findBin == NULL) {
+        printf("\tfindNode(bintree, 1, \"xylophone\", NULL) failed\n");
+        return False;
+    }
+    else
+        printf("\t- \"xylophone\" in bintree found: %s\n", nodeKey(findBin));
+    findBin = findNode(bintree, 1, NULL, newObject("Tarantula"));
+    if (findBin == NULL) {
+        printf("\tfindNode(bintree, 1, NULL, newObject()) failed\n");
+        return False;
+    }
+    else
+        printf("\t- findNode(bintree, 1, NULL, newObject()) found: %s\n", nodeKey(findBin));
+    findBin = findNode(bintree, 1, "octopus", NULL);
+    if (findBin != NULL) {
+        printf("\tfindNode in bintree of nonexistant key failed\n");
+        return False;
+    }
+    else
+        printf("\t- findNode in bintree of nonexistant key successful (returned NULL)\n");
+    findBin = findNode(bintree, 1, NULL, newObject("jackalope"));
+    if (findBin != NULL) {
+        printf("\tfindNode in bintree of nonexistant object failed\n");
+        return False;
+    }
+    else
+        printf("\t- findNode in bintree of nonexistant object successful (returned NULL)\n");
+
+    // findNode() - gen
+    findBin = findNode(gentree, 0, "FINDME1", NULL);
+    if (findBin == NULL) {
+        printf("\tfindNode(gentree, 1, \"FINDME1\", NULL) failed\n");
+        return False;
+    }
+    else
+        printf("\t- \"FINDME1\" in gentree found: %s\n", nodeKey(findBin));
+    findBin = findNode(gentree, 0, NULL, newObject("FINDME2"));
+    if (findBin == NULL) {
+        printf("\tfindNode(gentree, 1, NULL, newObject()) failed\n");
+        return False;
+    }
+    else
+        printf("\t- findNode(gentree, 1, NULL, newObject()) found: %s\n", nodeKey(findBin));
+    findBin = findNode(gentree, 0, "octopus", NULL);
+    if (findBin != NULL) {
+        printf("\tfindNode in gentree of nonexistant key failed\n");
+        return False;
+    }
+    else
+        printf("\t- findNode in gentree of nonexistant key successful (returned NULL)\n");
+    findBin = findNode(gentree, 0, NULL, newObject("jackalope"));
+    if (findBin != NULL) {
+        printf("\tfindNode in gentree of nonexistant object failed\n");
+        return False;
+    }
+    else
+        printf("\t- findNode in gentree of nonexistant object successful (returned NULL)\n");
+
+    addBinData(bintree, newObject("Panda"), newObject("Panda"));
+    addBinData(bintree, newObject("Rhino"), newObject("Rhino"));
+    addBinData(bintree, newObject("megazord"), newObject("megazord"));
+    addBinData(bintree, newObject("Thundurous"), newObject("Thundurous"));
+    addBinData(bintree, newObject("Pokemon"), newObject("Pokemon"));
+    addBinData(bintree, newObject("Koala"), newObject("Koala"));
+    addBinData(bintree, newObject("Dandelion"), newObject("Dandelion"));
+    addBinData(bintree, newObject("Camera"), newObject("Camera"));
+    addBinData(bintree, newObject("Angielski"), newObject("Angielski"));
+    addBinData(bintree, newObject("Dutch"), newObject("Dutch"));
+    addBinData(bintree, newObject("Doduo"), newObject("Doduo"));
+    addBinData(bintree, newObject("Eames"), newObject("Eames"));
+
+    int empc = 1;
+    for (int i = 0; i < numChildren(treeRoot(gentree)); i++) {
+        TreeNode *dir = nodeChild(treeRoot(gentree), i);
+        for (int j = 0; j < numChildren(dir); j++) {
+            TreeNode *pm = nodeChild(dir, j);
+            for (int k = 0; k < numChildren(pm); k++) {
+                sprintf(tmp, "Employee %d", empc++);
+                addData(gentree, pm, k, newObject(tmp), newObject(tmp), 0);
+            }
+        }
+    }
+    free(tmp);
+
+    // printTree()
+    printf("\n\n\n\t- Print 3:\n");
+    printf("\n*** bintree: ***\n");
+    printTree(bintree, treeRoot(bintree), 1, 0);
+    printf("\ntreeSize(bintree): %d\n", treeSize(bintree));
+
+    // deleteNode() test - bin
+    deleteNode(bintree, 1, "Mouse", NULL);
+    deleteNode(bintree, 1, NULL, newObject("Cat"));
+    printf("\tDeleted nodes from bintree\n");
+
+    // printTree()
+    printf("\n\n\n\t- Print 4:\n");
+    printf("\n*** bintree: ***\n");
+    printTree(bintree, treeRoot(bintree), 1, 0);
+    printf("\ntreeSize(bintree): %d\n", treeSize(bintree));
+
+    printf("\n\n*** gentree: ***\n");
+    printTree(gentree, treeRoot(gentree), 0, 0);
+    printf("\ntreeSize(gentree): %d\n\n", treeSize(gentree));
+
+    // deleteNode() test - gen
+    deleteNode(gentree, 0, "Chief 4", NULL);
+    deleteNode(gentree, 0, NULL, newObject("Chief 6"));
+    printf("\tDeleted nodes from gentree\n");
+
+    // printTree()
+    printf("\n\n*** gentree: ***\n");
+    printTree(gentree, treeRoot(gentree), 0, 0);
+    printf("\ntreeSize(gentree): %d\n\n", treeSize(gentree));
 
     // freeTree()
     freeTree(bintree);
@@ -480,3 +612,4 @@ char *newObject(char *text) {
     strcpy(newStr, text);
     return newStr;
 }
+
