@@ -64,6 +64,8 @@ TreeNode *addBinData(Tree *tree, void *data, char *key) {
         while (1) {
             if (numChildren(ptr) != 2) {
                 fprintf(stderr, "ERROR: Can't addBinData to non-binary tree\n");
+                fprintf(stderr, "       node %s has %d children\n",
+                                            nodeKey(ptr), numChildren(ptr));
                 newNode = NULL;
                 break;
             }
