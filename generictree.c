@@ -248,6 +248,7 @@ void deleteNode(Tree *tree, int isBinary, char *key, void *d) {
     TreeNode *n = treeRoot(tree);
     if (isBinary) {
         binarydelete(tree, n, key, d);
+        treeSize(tree)--;
     }
     else {
         Stack *stk = initStack(tree->destroy, tree->toString, tree->compare);
@@ -283,6 +284,7 @@ void deleteNode(Tree *tree, int isBinary, char *key, void *d) {
 
                         }
                         freeTreeNode(tree, nKid, 1);
+                        treeSize(tree)--;
                         return;
                     }
                 }

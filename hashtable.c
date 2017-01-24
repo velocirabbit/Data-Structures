@@ -97,7 +97,7 @@ int deleteHash(HashTable *ht, char *key) {
 
 unsigned hash(char *key) {
     unsigned hashval = HINIT;
-    for (hashval = 0; *key != '\0'; key++)
+    for (hashval; *key != '\0'; key++)
         hashval = (*key + HA * hashval) % HSIZE;
     return hashval;
 }

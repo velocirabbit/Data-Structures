@@ -131,7 +131,10 @@ void listInsert(List *list, int index, void *data) {
 void listAppend(List *list, void *data) {
     ListElement *oldTail = list->tail;
     list->tail = initListElement(data);
-    oldTail->next = list->tail;
+    if (oldtail == NULL)
+        list->head = list->tail;
+    else
+        oldTail->next = list->tail;
     (list->size)++;
 }
 
